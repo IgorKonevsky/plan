@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <div th:insert="~{/fragments/layout :: stylefrag}"></div>
+</head>
+<body>
+<div th:insert="~{/fragments/navbar-teacher}"></div>
+<h4>Задания студента:</h4>
+<h4 th:text="${student.getFullname()}"></h4>
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Название</th>
+            <th scope="col">Дата начала</th>
+            <th scope="col">Дедлайн</th>
+            <th scope="col">Статус</th>
+            <th scope="col">Описание</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task :${tasks}">
+            <td th:text="${task.getTitle()}">value</td>
+            <td th:text="${task.getStart()}">value</td>
+            <td th:text="${task.getDeadline()}">value</td>
+            <td th:text="${task.getStatus()}">value</td>
+            <td th:text="${task.getDescription()}">value</td>
+            <td>
+                <form th:method="GET" th:action="@{/group/{groupId}/teacher/tasks/{id}(id = ${task.getId()},groupId = ${group.getId()})}">
+                    <input type="submit" value="Открыть страницу с заданием"/>
+                </form>
+            </td>
+            <td>
+                <form th:method="DELETE" th:action="@{/group/{groupId}/teacher/tasks/{id}(id=${task.getId()},groupId = ${group.getId()})}">
+                    <input type="submit" value="Удалить" />
+                </form>
+            </td>
+
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

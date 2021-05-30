@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <div th:insert="~{/fragments/layout :: stylefrag}"></div>
+</head>
+<body>
+<div th:insert="~{/fragments/navbar-student}"></div>
+
+<div th:object="${task}">
+  <h5>Название:</h5>
+  <p th:text="*{title}"></p>
+  <h5>Дата выдачи:</h5>
+  <p th:text="*{start}"></p>
+  <h5>Дедлайн:</h5>
+  <p th:text="*{deadline}"></p>
+  <h5>Описание:</h5>
+  <p th:text="*{description}"></p>
+  <div th:if="*{delivery}">
+    <h5>Дата сдачи:</h5>
+    <p th:text="*{delivery}"></p>
+  </div>
+
+</div>
+
+<form th:method="PATCH" th:action="@{/group/{groupId}/student/tasks/{id}(id=${task.getId()},groupId = ${group.getId()})}" th:object="${task}" th:name="main">
+
+
+  <label> Статус
+
+    <select id="status" name="status">
+      <div th:if="${task.isActive()}">
+        <option th:value="ACTIVE" th:text="Активно" selected></option>
+        <option th:value="COMPLETED" th:text="Выполнено"></option>
+
+      </div>
+      <div th:if="${task.isCompleted()}">
+        <option th:value="ACTIVE" th:text="Активно" ></option>
+        <option th:value="COMPLETED" th:text="Выполнено" selected></option>
+
+      </div>
+      <div th:if="${task.isFinished()}">
+        <option th:value="FINISHED" th:text="Завершено" selected></option>
+      </div>
+      <div th:if="${task.isExpired()}">
+        <option th:value="ACTIVE" th:text="Активно"></option>
+        <option th:value="COMPLETED" th:text="Выполнено"></option>
+        <option th:value="EXPIRED" th:text="Просрочено" selected></option>
+      </div>
+
+    </select>
+
+
+
+  </label>
+
+  <label>Состояние
+
+    <select id="progress" name="progress">
+      <div th:if="${task.progressWorking()}">
+        <option th:value="WORKING"  selected>В работе</option>
+        <option th:value="STUCK" >Возникили трудности</option>
+
+      </div>
+      <div th:if="${task.progressStuck()}">
+        <option th:value="WORKING"  >В работе</option>
+        <option th:value="STUCK"  selected>Возникили трудности</option>
+
+      </div>
+      <div th:if="${task.progressNotSelected()}">
+        <option th:value="NOT_SELECTED"  selected>Не выбрано</option>
+        <option th:value="WORKING" >В работе</option>
+        <option th:value="STUCK" >Возникили трудности</option>
+
+      </div>
+
+
+    </select>
+
+  </label>
+  <input type="hidden" th:field="*{title}" id="title">
+  <input type="hidden" th:field="*{start}" id="start">
+  <input type="hidden" th:field="*{deadline}" id="deadline">
+  <input type="hidden" th:field="*{description}" id="description">
+  <input type="hidden" th:field="*{student}" id="student">
+  <input type="hidden" th:field="*{teacher}" id="teacher">
+  <div th:if="${task.getCommon()}">
+    <input type="hidden" th:field="*{common}" id="common">
+  </div>
+
+  <input type="submit" value="Сохранить" name="saveButton"/>
+</form>
+
+<form th:method="POST" th:action="@{/comment/{id}(id=${task.getId()})}">
+  <label> Введите комментарий
+    <input type="text" name="text"/>
+    <input type="submit" value="Добавить"/>
+  </label>
+
+</form>
+
+<div>
+  <br>
+  <div th:each="comment :${comments}">
+    <h6 th:text="${comment.getAuthor().getFullname()}"></h6>
+    <p th:text="${comment.getText()}"></p>
+  </div>
+</div>
+
+
+
+</body>
+</html>

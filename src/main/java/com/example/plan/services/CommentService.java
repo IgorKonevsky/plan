@@ -1,0 +1,34 @@
+package com.example.plan.services;
+
+import com.example.plan.entities.Comment;
+import com.example.plan.entities.Task;
+import com.example.plan.entities.User;
+import com.example.plan.repos.CommentRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class CommentService {
+
+    @Autowired
+    private CommentRepo commentRepo;
+
+    public void create(Comment comment, User author, Task task){
+        comment.setAuthor(author);
+        comment.setTask(task);
+        commentRepo.save(comment);
+
+    }
+
+    public void deleteCommentsByTask(Task task){
+        List<Comment> comments = commentRepo.findAll();
+
+        for(int i=0; i<comments.size();i++){
+            Comment comment = comments.get(i);
+            if (comment.getTask().equals(task))
+                commentRepo.delete(comment);
+        }
+    }
+}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <div th:insert="~{/fragments/layout :: stylefrag}"></div>
+</head>
+<body>
+<div th:insert="~{/fragments/navbar-student}"></div>
+
+<form th:method="POST" th:action="@{/group/{groupId}/student/tasks(groupId = ${group.getId()})}">
+  <label> Выберите категорию заданий
+    <select name="category">
+      <option value="ACTIVE">Активные</option>
+      <option value="COMPLETED">Выполненные</option>
+      <option value="FINISHED">Завершенные</option>
+      <option value="EXPIRED">Просроченные</option>
+    </select>
+    <input type="submit" value="Выбрать">
+  </label>
+</form>
+
+</body>
+</html>

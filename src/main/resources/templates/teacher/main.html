@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Main page</title>
+        <div th:insert="~{/fragments/layout :: stylefrag}"></div>
+        </head>
+<body>
+<div th:insert="~{/fragments/navbar-teacher}"></div>
+
+
+
+
+
+Hello
+<p th:text="${user.getFullname()}">user</p>
+<h5>Название группы</h5>
+<p th:text="${group.getTitle()}">value
+<h5>Код группы</h5>
+<p th:text="${group.getCode()}">value</p>
+<h5>Создать задание для всех студентов</h5>
+<div>
+<form th:method="POST" th:action="@{/group/{groupId}/teacher/tasks/common(groupId = ${group.getId()})}">
+    <label> Название
+        <input type="text" name="title"/>
+    </label>
+    <label> Дедлайн
+        <input type="date" name="deadline"/>
+    </label>
+    <label> Описание
+        <input type="text" name="description"/>
+    </label>
+    <input type="submit" value="Создать">
+</form>
+</div>
+
+</body>
+</html>

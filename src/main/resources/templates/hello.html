@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Start page</title>
+    <div th:insert="~{/fragments/layout :: stylefrag}"></div>
+</head>
+<body>
+Hello
+
+<div>
+    <a href="/logout">Выйти</a>
+</div>
+<div sec:authorize="!isAuthenticated()">
+<a href="/login">login</a>
+<a href="/registration">register</a>
+</div>
+
+<div>
+<form method="post" action="/group">
+    <label> Название группы
+        <input type="text" name="title">
+    </label>
+    <input type="submit" value="Создать">
+</form>
+</div>
+<div>
+    <p>Присоединиться к группе</p>
+    <form method="post" action="/find">
+        <label> Введите код группы
+            <input type="text" name="code">
+        </label>
+        <input type="submit" value="Присоединиться">
+    </form>
+</div>
+
+<div>
+    <p>Список созданных групп</p>
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Название</th>
+                <th scope="col">Ссылка</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="groupTeacher :${groupsTeacher}">
+                <td th:text="${groupTeacher.getTitle()}">value</td>
+
+
+                <td>
+                    <form th:method="GET" th:action="@{/group/{id}(id=${groupTeacher.getId()})}">
+                        <input type="submit" value="Открыть"/>
+                    </form>
+                </td>
+
+                <td>
+                    <form th:method="DELETE" th:action="@{/group/{id}(id=${groupTeacher.getId()})}">
+                        <input type="submit" value="Удалить" />
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div>
+    <p>Список групп, где вы состоите</p>
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Название</th>
+                <th scope="col">Ссылка</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="groupStudent :${groupsStudent}">
+                <td th:text="${groupStudent.getTitle()}">value</td>
+
+
+                <td>
+                    <form th:method="GET" th:action="@{/group/{id}(id=${groupStudent.getId()})}">
+                        <input type="submit" value="Открыть"/>
+                    </form>
+                </td>
+
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+</body>
+</html>

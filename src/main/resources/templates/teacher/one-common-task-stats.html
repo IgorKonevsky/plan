@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <div th:insert="~{/fragments/layout :: stylefrag}"></div>
+</head>
+<body>
+<div th:insert="~{/fragments/navbar-teacher}"></div>
+
+
+
+<div>
+    <h5>Активно:</h5>
+    <p th:text="${statusActive}"></p>
+    <td>
+        <form th:method="GET" th:action="@{/group/{groupId}/teacher/stats/tasks/{code}/active(code = ${code},groupId = ${group.getId()})}">
+            <input type="submit" value="Подробнее"/>
+        </form>
+    </td>
+</div>
+<div>
+    <h5>Выполнено:</h5>
+    <p th:text="${statusCompleted}"></p>
+    <form th:method="GET" th:action="@{/group/{groupId}/teacher/stats/tasks/{code}/completed(code = ${code},groupId = ${group.getId()})}">
+        <input type="submit" value="Подробнее"/>
+    </form>
+</div>
+<div>
+    <h5>Просрочено:</h5>
+    <p th:text="${statusExpired}"></p>
+    <form th:method="GET" th:action="@{/group/{groupId}/teacher/stats/tasks/{code}/expired(code = ${code},groupId = ${group.getId()})}">
+        <input type="submit" value="Подробнее"/>
+    </form>
+</div>
+<div>
+    <h5>Завершено:</h5>
+    <p th:text="${statusFinished}"></p>
+    <form th:method="GET" th:action="@{/group/{groupId}/teacher/stats/tasks/{code}/finished(code = ${code},groupId = ${group.getId()})}">
+        <input type="submit" value="Подробнее"/>
+    </form>
+</div>
+<div>
+    <h5>Застрявших студентов:</h5>
+    <p th:text="${progressStuck}"></p>
+    <form th:method="GET" th:action="@{/group/{groupId}/teacher/stats/tasks/{code}/stuck(code = ${code},groupId = ${group.getId()})}">
+        <input type="submit" value="Подробнее"/>
+    </form>
+</div>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration page</title>
+</head>
+<body>
+
+<div>
+    Уже есть аккаунт? <a href="/">Войти</a>
+</div>
+<div>
+    <form method="POST" action="/registration">
+        <label> username
+            <input type="text" name="username"/>
+        </label>
+        <label> firstname
+            <input type="text" name="firstname" />
+        </label>
+        <label> lastname
+            <input type="text" name="lastname"/>
+        </label>
+        <label> password
+            <input type="password" name="password"/>
+        </label>
+
+        <input type="submit" value="Sign up" name="register">
+    </form>
+</div>
+</body>
+</html>

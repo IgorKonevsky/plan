@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <div th:insert="~{/fragments/layout :: stylefrag}"></div>
+</head>
+<body>
+<div th:insert="~{/fragments/navbar-teacher}"></div>
+<form th:method="POST" th:action="@{/group/{groupId}/teacher/tasks/student/{id}(id=${student.getId()},groupId = ${group.getId()})}" th:object="${task}">
+    <label> Название
+        <input type="text" th:field="*{title}" id="title"/>
+    </label>
+    <label> Дедлайн
+        <input type="date" th:field="*{deadline}" id="deadline"/>
+    </label>
+    <label> Описание
+        <input type="text" th:field="*{description}" id="description"/>
+    </label>
+    <input type="submit" value="Создать" />
+</form>
+
+</body>
+</html>

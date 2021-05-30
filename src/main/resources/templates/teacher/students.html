@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <div th:insert="~{/fragments/layout :: stylefrag}"></div>
+</head>
+<body>
+<div th:insert="~{/fragments/navbar-teacher}"></div>
+
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Имя</th>
+            <th scope="col">Ник</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="student :${students}">
+            <td th:text="${student.getFullname()}">value</td>
+            <td th:text="${student.getUsername()}">value</td>
+
+            <td>
+            <form th:method="GET" th:action="@{/group/{groupId}/teacher/tasks/student/{id}/new(id = ${student.getId()},groupId = ${group.getId()})}">
+                <input type="submit" value="Добавить задание"/>
+            </form>
+            </td>
+
+            <td>
+                <form th:method="GET" th:action="@{/group/{groupId}/teacher/tasks/student/{id}(id = ${student.getId()},groupId = ${group.getId()})}">
+                    <input type="submit" value="Посмотреть задания"/>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <div th:insert="~{/fragments/layout :: stylefrag}"></div>
+</head>
+<body>
+<div th:insert="~{/fragments/navbar-teacher}"></div>
+
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+
+            <th scope="col">Название задания</th>
+            <th scope="col">Ссылка</th>
+
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task :${tasks}">
+            <td th:text="${task.getTitle()}">value</td>
+
+            <td>
+                <form th:method="GET" th:action="@{/group/{groupId}/teacher/stats/tasks/{code}(code = ${task.getCommon()},groupId = ${group.getId()})}">
+                    <input type="submit" value="Посмотреть статистику по заданию"/>
+                </form>
+            </td>
+
+
+
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+</body>
+</html>

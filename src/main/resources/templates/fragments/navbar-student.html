@@ -1,0 +1,32 @@
+<html>
+<body>
+
+<div th:fragment="navbar-student">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <form th:method="GET" th:action="@{/group/{id}(id=${group.getId()})}">
+                <button type="submit"><a class="navbar-brand">Главная</a></button>
+            </form>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link" href="/">Стартовая страница</a>
+
+                    <form th:method="GET" th:action="@{/group/{id}/student/tasks(id=${group.getId()})}">
+                        <button type="submit"><a class="nav-link">Задачи</a></button>
+                    </form>
+
+                    <a class="nav-link" href="#">Профиль</a>
+
+                    <a class="nav-link" href="/logout">Выйти</a>
+
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <div th:insert="~{/fragments/layout :: stylefrag}"></div>
+</head>
+<body>
+<div th:insert="~{/fragments/navbar-teacher}"></div>
+
+<form th:method="POST" th:action="@{/group/{groupId}/teacher/stats(groupId = ${group.getId()})}">
+  <label> Выберите категорию статистики
+    <select name="category">
+      <option value="STUDENTS">По студентам</option>
+      <option value="TASKS">По заданиям</option>
+
+    </select>
+    <input type="submit" value="Выбрать">
+  </label>
+</form>
+
+
+</body>
+</html>

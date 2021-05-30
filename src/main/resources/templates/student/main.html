@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Main page</title>
+        <div th:insert="~{/fragments/layout :: stylefrag}"></div>
+        </head>
+<body>
+<div th:insert="~{/fragments/navbar-student}"></div>
+
+
+
+
+
+Hello
+<p th:text="${user.getFullname()}">user</p>
+<p th:text="${group.getTitle()}">value</p>
+
+
+</body>
+</html>
