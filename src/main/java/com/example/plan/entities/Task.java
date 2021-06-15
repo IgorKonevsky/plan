@@ -1,5 +1,6 @@
 package com.example.plan.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -28,7 +29,8 @@ public class Task {
 
     private String title;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime start;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -65,6 +67,12 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
+
+    /*@ManyToMany(cascade = Ca)
+    @JoinTable(
+
+    )
+    List<Tag> tags;*/
 
 
 

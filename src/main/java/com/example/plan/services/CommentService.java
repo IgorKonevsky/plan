@@ -1,6 +1,7 @@
 package com.example.plan.services;
 
 import com.example.plan.entities.Comment;
+import com.example.plan.entities.CommentFile;
 import com.example.plan.entities.Task;
 import com.example.plan.entities.User;
 import com.example.plan.repos.CommentRepo;
@@ -15,9 +16,12 @@ public class CommentService {
     @Autowired
     private CommentRepo commentRepo;
 
-    public void create(Comment comment, User author, Task task){
+    public void create(Comment comment, User author, Task task, CommentFile commentFile){
         comment.setAuthor(author);
         comment.setTask(task);
+        if(commentFile!=null);
+            comment.setCommentFile(commentFile);
+
         commentRepo.save(comment);
 
     }

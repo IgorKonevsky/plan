@@ -8,6 +8,8 @@
 </head>
 <body>
 <div th:insert="~{/fragments/navbar-teacher}"></div>
+<main>
+    <div class="filter">
 <form th:method="POST" th:action="@{/group/{groupId}/teacher/tasks/student/{id}(id=${student.getId()},groupId = ${group.getId()})}" th:object="${task}">
     <label> Название
         <input type="text" th:field="*{title}" id="title"/>
@@ -20,6 +22,7 @@
     </label>
     <input type="submit" value="Создать" />
 </form>
-
+    </div>
+</main>
 </body>
 </html>

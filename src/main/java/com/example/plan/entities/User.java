@@ -36,6 +36,9 @@ public class User implements UserDetails{
     @Column(name = "lastname")
     private String lastname;
 
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "password")
     private String password;
 
@@ -94,6 +97,14 @@ public class User implements UserDetails{
         this.lastname = lastname;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -114,6 +125,8 @@ public class User implements UserDetails{
     public void setGroups(List<Group> groups) {
         this.groups = groups;
     }
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

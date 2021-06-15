@@ -2,25 +2,32 @@ package com.example.plan.controllers;
 
 
 import com.example.plan.entities.*;
+import com.example.plan.repos.CommentFileRepo;
+import com.example.plan.repos.TaskFileRepo;
 import com.example.plan.repos.TaskRepo;
 import com.example.plan.repos.UserRepo;
-import com.example.plan.services.CommentService;
-import com.example.plan.services.TaskService;
-import com.example.plan.services.UserService;
+import com.example.plan.services.*;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/group/{group}/teacher")
@@ -41,6 +48,28 @@ public class TeacherController {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private TaskFileRepo taskFileRepo;
+
+    @Autowired
+    private TaskFileService taskFileService;
+
+    @Autowired
+    private CommentFileRepo commentFileRepo;
+
+    @Autowired
+    private CommentFileServices commentFileServices;
+
+    @Autowired
+    private MailSender mailSender;
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+
+
+    @Value("${upload.path}")
+    private String uploadPath;
 
     @GetMapping("/students")
     public String getStudents(Model model,@PathVariable("group")Group group){
@@ -62,9 +91,16 @@ public class TeacherController {
     public String createTask(@AuthenticationPrincipal User teacher, Task task,@PathVariable("id") User student, Model model, @PathVariable("group")Group group){
 
         task.setGroup(group);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
-        task.setStart(time.atDate(date));
+        LocalDateTime start = LocalDateTime.parse(dateFormat.format(LocalDateTime.now()));
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+start);
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        //start = formatter.format(start);
+        //start = LocalDateTime.parse(dateFormat.format(start));
+        task.setStart(start);
         task.setTeacher(teacher);
         task.setStudent(student);
         task.setStatus(TaskStatus.ACTIVE);
@@ -73,21 +109,43 @@ public class TeacherController {
 
         taskRepo.save(task);
 
-        return "redirect:/group/"+task.getGroup().getId()+"/teacher/students";
+        return "redirect:/group/"+group.getId()+"/teacher/students";
     }
 
     @PostMapping("/tasks/common")
-    public String createCommonTask(@AuthenticationPrincipal User teacher, Task task1, Model model, @PathVariable("group")Group group){
+    public String createCommonTask(@AuthenticationPrincipal User teacher, Task task1, @RequestParam("file") MultipartFile file, Model model, @PathVariable("group")Group group) throws IOException {
 
         List<User> students = group.getStudents();
         List<Task> tasks = new ArrayList<>();
+        List<TaskFile> taskFiles = new ArrayList<>();
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
+        LocalDateTime start = LocalDateTime.now();
         String code = MainController.groupCode();
+        String uuidFile;
+        String resultFilename = null;
+        boolean flag = false;
+        if(file!=null){
+            flag=true;
+        }
+        File uploadDir = new File(uploadPath);
+
+        if(!uploadDir.exists()){
+            uploadDir.mkdir();
+        }
+        if(flag) {
+            uuidFile = UUID.randomUUID().toString();
+            resultFilename = uuidFile + "." + file.getOriginalFilename();
+            file.transferTo(new File(uploadPath + "/" + resultFilename));
+        }
+
 
         for (int i = 0; i<students.size();i++) {
             Task task = new Task();
-            task.setStart(time.atDate(date));
+            TaskFile taskFile = new TaskFile();
+
+            System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+start);
+            task.setStart(start);
             task.setTeacher(teacher);
             task.setStatus(TaskStatus.ACTIVE);
             task.setProgress(Progress.NOT_SELECTED);
@@ -97,8 +155,20 @@ public class TeacherController {
             task.setDescription(task1.getDescription());
             task.setStudent(students.get(i));
             task.setGroup(group);
+            String message = String.format("Здравствуйте, вам было дано новое задание - %s",task1.getTitle());
+            mailSender.send(students.get(i).getEmail(),"Новое задание!",message);
+
+
+            if(flag){
+                taskFile.setOriginalname(file.getOriginalFilename());
+                taskFile.setFilename(resultFilename);
+                taskFile.setTask(task);
+                //taskFileRepo.save(taskFile);
+                taskFiles.add(taskFile);
+            }
             tasks.add(task);
         }
+        taskFileRepo.saveAll(taskFiles);
         taskRepo.saveAll(tasks);
         /*task.setGroup(group);
         LocalDate date = LocalDate.now();
@@ -132,7 +202,12 @@ public class TeacherController {
     public String taskPage(@PathVariable("id")Task task,Model model,@PathVariable("group")Group group){
         model.addAttribute("task",task);
         model.addAttribute("comments",task.getComments());
-        //model.addAttribute("group",group);
+        model.addAttribute("group",group);
+
+        List<TaskFile> taskFiles = taskFileService.getTaskFilesByTask(task);
+
+        model.addAttribute("taskFiles",taskFiles);
+
         if(task.getStatus()!=TaskStatus.FINISHED){
             task.setGrade(null);
             taskService.update(task.getId(),task);

@@ -7,6 +7,91 @@
     <title>Layout template</title>
     <div th:fragment="stylefrag">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+        <link rel="stylesheet" href = "https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+
+        <style>
+            header{
+                background: #FCFFF0;
+                margin-bottom: 20px;
+
+                border-bottom: 4px solid rgba(8, 32, 34, 1);
+
+            }
+            header button{
+                background: none;
+                border: none !important;
+            }
+            header a{
+                border-bottom: 1px solid rgba(0,0,0,0) !important;
+            }
+
+            header a:hover{
+
+                border-bottom: 1px solid grey !important;
+                transition: .3s;
+            }
+            .navbar-collapse {
+                flex-basis: unset !important;
+                flex-grow: inherit;
+            }
+            header .navbar-nav{
+                place-self: end;
+            }
+
+
+            main{
+                max-width: 1200px;
+                width: 90vw;
+
+                background: url("https://stihi.ru/pics/2021/03/05/5366.jpg");
+                background-size: cover;
+                margin: 0 auto;
+                color: white !important;
+            }
+            table{
+                color: white !important;
+            }
+
+            .filter{
+                width: 100%;
+                height: 100%;
+                background: rgba(8, 32, 34, .5);
+                padding: 50px;
+
+            }
+
+            label{
+                margin: 10px 0;
+                display:  flex;
+                justify-content: space-between;
+
+            }
+
+            form{
+                display: grid;
+            }
+
+            input{
+                border-radius: 5px;
+                background: rgba(8, 32, 34, 1);
+                color: white;
+                border: 2px solid white;
+                padding: 5px 10px;
+                place-self: end;
+            }
+
+            .already{
+                border-radius: 10px;
+                background: rgba(8, 32, 34, 1);
+
+                border: 2px solid white;
+                padding: 10px;
+                margin-bottom: 10px;
+
+            }
+
+            a{ color: white!important; }
+        </style>
     </div>
 </head>
 <body>

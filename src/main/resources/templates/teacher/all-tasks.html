@@ -8,7 +8,8 @@
 </head>
 <body>
 <div th:insert="~{/fragments/navbar-teacher}"></div>
-
+<main>
+  <div class="filter">
 <form th:method="POST" th:action="@{/group/{groupId}/teacher/tasks(groupId = ${group.getId()})}">
   <label> Выберите категорию заданий по статусу
     <select name="category">
@@ -27,6 +28,7 @@
     <input type="submit" value="Выбрать">
   </label>
 </form>
-
+  </div>
+</main>
 </body>
 </html>

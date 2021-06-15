@@ -3,24 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <div th:insert="~{/fragments/layout :: stylefrag}"></div>
+
+
+
 </head>
 <body>
+<main>
+  <div class="filter">
+    <div class="container-fluid">
+      <div class="already">
+        Еще нет аккаунта? <a href="/registration">Зарегестрироваться</a>
+      </div>
 
-<div>
-  Еще нет аккаунта? <a href="/registration">Зарегестрироваться</a>
-</div>
+      <form method="POST" action="/login">
+        <label> username
+          <input type="text" name="username"/>
+        </label>
 
-<form method="POST" action="/login">
-  <label> username
-    <input type="text" name="username"/>
-  </label>
+        <label> password
+          <input type="password" name="password"/>
+        </label>
 
-  <label> password
-    <input type="password" name="password"/>
-  </label>
-
-  <input type="submit" value="Sign up" name="login">
-</form>
-
+        <input type="submit" value="Sign up" name="login">
+      </form>
+    </div>
+  </div>
+</main>
 </body>
 </html>

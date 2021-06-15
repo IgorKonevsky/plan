@@ -93,19 +93,31 @@
   <input type="submit" value="Сохранить" name="saveButton"/>
 </form>
 
-<form th:method="POST" th:action="@{/comment/{id}(id=${task.getId()})}">
+
+<div>Список прикрепленных файлов
+  <br>
+  <div th:each="file :${taskFiles}">
+    <a th:href="@{/taskfile/{id}(id=${file.getId()})}" th:text="${file.getOriginalname()}"></a>
+
+  </div>
+</div>
+<div>
+<div>
+<form th:method="POST" th:action="@{/comment/{id}(id=${task.getId()})}" enctype="multipart/form-data">
   <label> Введите комментарий
     <input type="text" name="text"/>
+    <input type="file" name="file">
     <input type="submit" value="Добавить"/>
   </label>
 
 </form>
-
+</div>
 <div>
   <br>
   <div th:each="comment :${comments}">
     <h6 th:text="${comment.getAuthor().getFullname()}"></h6>
-    <p th:text="${comment.getText()}"></p>
+    <p th:if="${comment.getText()}" th:text="${comment.getText()}"></p>
+    <a th:if="${comment.getCommentFile()}" th:text="${comment.getCommentFile().getOriginalname()}" th:href="@{/commentfile/{id}(id=${comment.getCommentFile().getId()})}"></a>
   </div>
 </div>
 

@@ -8,6 +8,8 @@
 </head>
 <body>
 <div th:insert="~{/fragments/navbar-teacher}"></div>
+<main>
+    <div class="filter">
 <h4>Задания студента:</h4>
 <h4 th:text="${student.getFullname()}"></h4>
 <div>
@@ -18,7 +20,7 @@
             <th scope="col">Дата начала</th>
             <th scope="col">Дедлайн</th>
             <th scope="col">Статус</th>
-            <th scope="col">Описание</th>
+
 
         </tr>
         </thead>
@@ -28,7 +30,7 @@
             <td th:text="${task.getStart()}">value</td>
             <td th:text="${task.getDeadline()}">value</td>
             <td th:text="${task.getStatus()}">value</td>
-            <td th:text="${task.getDescription()}">value</td>
+
             <td>
                 <form th:method="GET" th:action="@{/group/{groupId}/teacher/tasks/{id}(id = ${task.getId()},groupId = ${group.getId()})}">
                     <input type="submit" value="Открыть страницу с заданием"/>
@@ -45,6 +47,7 @@
         </tbody>
     </table>
 </div>
-
+    </div>
+</main>
 </body>
 </html>

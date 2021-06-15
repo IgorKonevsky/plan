@@ -12,15 +12,16 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link" href="/">Стартовая страница</a>
+
 
                     <form th:method="GET" th:action="@{/group/{id}/student/tasks(id=${group.getId()})}">
                         <button type="submit"><a class="nav-link">Задачи</a></button>
                     </form>
 
-                    <a class="nav-link" href="#">Профиль</a>
 
+                    <a class="nav-link" href="/">Стартовая страница</a>
                     <a class="nav-link" href="/logout">Выйти</a>
+
 
                 </div>
             </div>

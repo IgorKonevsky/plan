@@ -5,48 +5,57 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <div th:insert="~{/fragments/layout :: stylefrag}"></div>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+        <link rel="stylesheet" href = "https://use.fontawesome.com/releases/v5.8.2/css/all.css">
 </head>
 <body>
-<div th:insert="~{/fragments/navbar-teacher}"></div>
 
-<div>
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">Имя студента</th>
-            <th scope="col">Название</th>
-            <th scope="col">Дата начала</th>
-            <th scope="col">Дедлайн</th>
-            <th scope="col">Статус</th>
-            <th scope="col">Описание</th>
 
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="task :${tasks}">
-            <td th:each="student : ${students}" th:if="${task.getStudent()==student}" th:text="${student.getFullname()}">value</td>
-            <td th:text="${task.getTitle()}">value</td>
-            <td th:text="${task.getStart()}">value</td>
-            <td th:text="${task.getDeadline()}">value</td>
-            <td th:text="${task.getStatus()}">value</td>
-            <td th:text="${task.getDescription()}">value</td>
-            <td>
-                <form th:method="GET" th:action="@{/group/{groupId}/teacher/tasks/{id}(id = ${task.getId()},groupId = ${group.getId()})}">
-                    <input type="submit" value="Открыть страницу с заданием"/>
-                </form>
-            </td>
-            <td>
-                <form th:method="DELETE" th:action="@{/group/{groupId}/teacher/tasks/{id}(id=${task.getId()},groupId = ${group.getId()})}">
-                    <input type="submit" value="Удалить" />
-                </form>
-            </td>
+    <div th:insert="~{/fragments/navbar-teacher}"></div>
+
+<main>
+
+    <div class="filter">
+        <h4>Активные задания</h4>
+        <div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Имя студента</th>
+                    <th scope="col">Название</th>
+                    <th scope="col">Дата начала</th>
+                    <th scope="col">Дедлайн</th>
 
 
 
-        </tr>
-        </tbody>
-    </table>
-</div>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="task :${tasks}">
+                    <td th:each="student : ${students}" th:if="${task.getStudent()==student}" th:text="${student.getFullname()}">value</td>
+                    <td th:text="${task.getTitle()}">value</td>
+                    <td th:text="${task.getStart()}">value</td>
+                    <td th:text="${task.getDeadline()}">value</td>
 
+
+                    <td>
+                        <form th:method="GET" th:action="@{/group/{groupId}/teacher/tasks/{id}(id = ${task.getId()},groupId = ${group.getId()})}">
+                            <input type="submit" value="Открыть страницу с заданием"/>
+                        </form>
+                    </td>
+                    <td>
+                        <form th:method="DELETE" th:action="@{/group/{groupId}/teacher/tasks/{id}(id=${task.getId()},groupId = ${group.getId()})}">
+                            <input type="submit" value="Удалить" />
+                        </form>
+                    </td>
+
+
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
 </body>
 </html>

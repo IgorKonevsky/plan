@@ -1,8 +1,12 @@
 package com.example.plan.controllers;
 
 import com.example.plan.entities.*;
+import com.example.plan.repos.CommentFileRepo;
+import com.example.plan.repos.TaskFileRepo;
 import com.example.plan.repos.TaskRepo;
 import com.example.plan.repos.UserRepo;
+import com.example.plan.services.CommentFileServices;
+import com.example.plan.services.TaskFileService;
 import com.example.plan.services.TaskService;
 import com.example.plan.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Controller
 @RequestMapping("/group/{group}/student")
@@ -35,6 +40,18 @@ public class StudentController {
         model.addAttribute("group",group);
         return "/student/all-tasks";
     }
+
+    @Autowired
+    private TaskFileRepo taskFileRepo;
+
+    @Autowired
+    private TaskFileService taskFileService;
+
+    @Autowired
+    private CommentFileRepo commentFileRepo;
+
+    @Autowired
+    private CommentFileServices commentFileServices;
 
     @PostMapping("/tasks")
     public String selectTaskCategory(@RequestParam("category")String category,@PathVariable("group")Group group){
@@ -82,6 +99,10 @@ public class StudentController {
         model.addAttribute("task",task);
         model.addAttribute("comments",task.getComments());
         model.addAttribute("group",group);
+        List<TaskFile> taskFiles = taskFileService.getTaskFilesByTask(task);
+
+        model.addAttribute("taskFiles",taskFiles);
+
         return "/student/one-task";
     }
 

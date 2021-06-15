@@ -2,39 +2,46 @@
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <body>
 <div th:fragment="navbar-teacher">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <form th:method="GET" th:action="@{/group/{id}(id=${group.getId()})}">
-                <button type="submit"><a class="navbar-brand">Главная</a></button>
-            </form>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <form th:method="GET" th:action="@{/group/{id}(id=${group.getId()})}">
+                    <button type="submit"><a class="navbar-brand">Главная</a></button>
+                </form>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                    <a class="nav-link" href="/">Стартовая страница</a>
-
-                    <form th:method="GET" th:action="@{/group/{id}/teacher/tasks(id=${group.getId()})}">
-                        <button type="submit"><a class="nav-link">Задачи</a></button>
-                    </form>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
 
 
+                        <form th:method="GET" th:action="@{/group/{id}/teacher/tasks(id=${group.getId()})}">
+                            <button type="submit"><a class="nav-link">Задачи</a></button>
+                        </form>
 
-                    <form th:method="GET" th:action="@{/group/{id}/teacher/students(id=${group.getId()})}">
-                        <button type="submit"><a class="nav-link">Студенты</a></button>
-                    </form>
-                    <form th:method="GET" th:action="@{/group/{id}/teacher/stats(id=${group.getId()})}">
-                        <button type="submit"><a class="nav-link">Статистика</a></button>
-                    </form>
 
-                    <a class="nav-link" href="#">Профиль</a>
-                    <a class="nav-link" href="/logout">Выйти</a>
 
+                        <form th:method="GET" th:action="@{/group/{id}/teacher/students(id=${group.getId()})}">
+                            <button type="submit"><a class="nav-link">Студенты</a></button>
+                        </form>
+
+
+
+                        <form th:method="GET" th:action="@{/}">
+                            <button type="submit"><a class="nav-link">Стартовая страница</a></button>
+                        </form>
+                        <form th:method="GET" th:action="@{/logout}">
+                            <button type="submit"><a class="nav-link">Выйти</a></button>
+                        </form>
+
+
+
+                    </div>
                 </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </header>
 </div>
 </body>
 </html>

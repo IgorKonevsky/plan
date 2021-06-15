@@ -24,6 +24,10 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User author;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "file_id", referencedColumnName = "id")
+    private CommentFile commentFile;
+
     public Long getId() {
         return id;
     }

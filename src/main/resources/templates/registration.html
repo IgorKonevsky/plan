@@ -4,29 +4,38 @@
 <head>
     <meta charset="UTF-8">
     <title>Registration page</title>
+    <div th:insert="~{/fragments/layout :: stylefrag}"></div>
 </head>
 <body>
+<main>
+    <div class="filter">
+        <div class="container-fluid">
+            <div class="already">
+                Уже есть аккаунт? <a href="/">Войти</a>
+            </div>
+            <div class="">
+                <form method="POST" action="/registration">
+                    <label class="form-label"> Username
+                        <input type="text" name="username" placeholder="Введите никнейм"/>
+                    </label>
+                    <label class="form-label"> email
+                        <input type="email" name="email" placeholder="Введите почту"/>
+                    </label>
+                    <label> Имя
+                        <input type="text" name="firstname" placeholder="Введите имя"/>
+                    </label>
+                    <label> Фамилия
+                        <input type="text" name="lastname" placeholder="Введите фамилию"/>
+                    </label>
+                    <label> Пароль
+                        <input type="password" name="password" placeholder="Введите пароль"/>
+                    </label>
 
-<div>
-    Уже есть аккаунт? <a href="/">Войти</a>
-</div>
-<div>
-    <form method="POST" action="/registration">
-        <label> username
-            <input type="text" name="username"/>
-        </label>
-        <label> firstname
-            <input type="text" name="firstname" />
-        </label>
-        <label> lastname
-            <input type="text" name="lastname"/>
-        </label>
-        <label> password
-            <input type="password" name="password"/>
-        </label>
-
-        <input type="submit" value="Sign up" name="register">
-    </form>
-</div>
+                    <input type="submit" value="Sign up" name="register">
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
 </body>
 </html>
