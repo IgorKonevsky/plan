@@ -1,14 +1,8 @@
 package com.example.plan.controllers;
 
 import com.example.plan.entities.*;
-import com.example.plan.repos.CommentFileRepo;
-import com.example.plan.repos.TaskFileRepo;
-import com.example.plan.repos.TaskRepo;
-import com.example.plan.repos.UserRepo;
-import com.example.plan.services.CommentFileServices;
-import com.example.plan.services.TaskFileService;
-import com.example.plan.services.TaskService;
-import com.example.plan.services.UserService;
+import com.example.plan.repos.*;
+import com.example.plan.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -16,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -34,6 +29,13 @@ public class StudentController {
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private SubtaskRepo subtaskRepo;
+
+    @Autowired
+    private SubtaskService subtaskService;
+
 
     @GetMapping("/tasks")
     public String allTasks(@PathVariable("group")Group group,Model model){
@@ -100,8 +102,10 @@ public class StudentController {
         model.addAttribute("comments",task.getComments());
         model.addAttribute("group",group);
         List<TaskFile> taskFiles = taskFileService.getTaskFilesByTask(task);
+        List<Subtask> subtasks = subtaskService.getSubtasksByTask(task);
 
         model.addAttribute("taskFiles",taskFiles);
+        model.addAttribute("subtasks",subtasks);
 
         return "/student/one-task";
     }
@@ -114,7 +118,7 @@ public class StudentController {
         if(task.getStatus().equals(TaskStatus.COMPLETED)){
             LocalDate date = LocalDate.now();
             LocalTime time = LocalTime.now();
-            task.setDelivery(time.atDate(date));
+            task.setDelivery(LocalDateTime.now());
         }
         if(task.getStatus()!=TaskStatus.COMPLETED){
             task.setDelivery(null);

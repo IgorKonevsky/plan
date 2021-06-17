@@ -139,6 +139,20 @@ public class TaskService {
 
     }
 
+    public List<Task> getTasksByStudentAndProgress(Group group, User student, Progress progress){
+        List<Task> finalList = new ArrayList<>();
+        List<Task> bufferList = taskRepo.findAll();
+        for (int i = 0; i<bufferList.size(); i++){
+            Task task = bufferList.get(i);
+            if(task.getGroup().equals(group)&& task.getStudent().getId().equals(student.getId()) && task.getProgress().equals(progress) )
+                finalList.add(task);
+        }
+
+
+        return finalList;
+
+    }
+
 
 
 

@@ -1,13 +1,12 @@
 package com.example.plan.controllers;
 
-import com.example.plan.entities.Group;
-import com.example.plan.entities.Role;
-import com.example.plan.entities.User;
+import com.example.plan.entities.*;
 import com.example.plan.repos.GroupRepo;
 import com.example.plan.repos.RolesRepo;
 import com.example.plan.repos.UserRepo;
 import com.example.plan.services.GroupService;
 import com.example.plan.services.RolesService;
+import com.example.plan.services.TaskService;
 import com.example.plan.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -39,6 +38,9 @@ public class MainController {
 
     @Autowired
     private RolesService rolesService;
+
+    @Autowired
+    private TaskService taskService;
 
     public static String groupCode(){
         SecureRandom random = new SecureRandom();
@@ -110,11 +112,22 @@ public class MainController {
         model.addAttribute("user",user);
         model.addAttribute("group",group);
 
+
         if(rolesService.getUserRole(user,group).equals(Role.TEACHER)){
             return "/teacher/main";
         }
-        else
+        else{
+            List<Task> newTasks = taskService.getTasksByStudentAndProgress(group,user, Progress.NOT_SELECTED);
+            model.addAttribute("newTasks",newTasks);
+            return "/student/main";
+        }
 
-        return "/student/main";
+
+    }
+
+    @GetMapping("/profile")
+    public String profilePage(@AuthenticationPrincipal User user){
+
+        return "profile";
     }
 }

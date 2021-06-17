@@ -2,6 +2,7 @@
 <body>
 
 <div th:fragment="navbar-student">
+    <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <form th:method="GET" th:action="@{/group/{id}(id=${group.getId()})}">
@@ -15,11 +16,14 @@
 
 
                     <form th:method="GET" th:action="@{/group/{id}/student/tasks(id=${group.getId()})}">
-                        <button type="submit"><a class="nav-link">Задачи</a></button>
+                        <button type="submit"><a class="nav-link">Задания</a></button>
                     </form>
 
 
                     <a class="nav-link" href="/">Стартовая страница</a>
+                    <form th:method="GET" th:action="@{/profile}">
+                        <button type="submit"><a class="nav-link">Профиль</a></button>
+                    </form>
                     <a class="nav-link" href="/logout">Выйти</a>
 
 
@@ -27,6 +31,7 @@
             </div>
         </div>
     </nav>
+    </header>
 </div>
 
 </body>

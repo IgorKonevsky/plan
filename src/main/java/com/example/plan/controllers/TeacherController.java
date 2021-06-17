@@ -2,10 +2,7 @@ package com.example.plan.controllers;
 
 
 import com.example.plan.entities.*;
-import com.example.plan.repos.CommentFileRepo;
-import com.example.plan.repos.TaskFileRepo;
-import com.example.plan.repos.TaskRepo;
-import com.example.plan.repos.UserRepo;
+import com.example.plan.repos.*;
 import com.example.plan.services.*;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/group/{group}/teacher")
@@ -59,6 +53,13 @@ public class TeacherController {
 
     @Autowired
     private CommentFileServices commentFileServices;
+
+    @Autowired
+    private SubtaskRepo subtaskRepo;
+
+    @Autowired
+    private SubtaskService subtaskService;
+
 
     @Autowired
     private MailSender mailSender;
@@ -95,7 +96,7 @@ public class TeacherController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
-        LocalDateTime start = LocalDateTime.parse(dateFormat.format(LocalDateTime.now()));
+        LocalDateTime start = LocalDateTime.now();
         System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+start);
         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         //start = formatter.format(start);
@@ -113,10 +114,12 @@ public class TeacherController {
     }
 
     @PostMapping("/tasks/common")
-    public String createCommonTask(@AuthenticationPrincipal User teacher, Task task1, @RequestParam("file") MultipartFile file, Model model, @PathVariable("group")Group group) throws IOException {
-
+    public String createCommonTask(@AuthenticationPrincipal User teacher, Task task1,@RequestParam(name = "file") MultipartFile file,@RequestParam(name = "subtask[]",required = false)String[] subtaskNames, Model model, @PathVariable("group")Group group) throws IOException {
+        System.out.println("##########################################################################"+Arrays.toString(subtaskNames));
         List<User> students = group.getStudents();
         List<Task> tasks = new ArrayList<>();
+        List<Subtask> subtaskList = new ArrayList<>();
+
         List<TaskFile> taskFiles = new ArrayList<>();
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
@@ -155,6 +158,16 @@ public class TeacherController {
             task.setDescription(task1.getDescription());
             task.setStudent(students.get(i));
             task.setGroup(group);
+            if(subtaskNames!=null) {
+                for (String subtaskName : subtaskNames) {
+                    Subtask subtask = new Subtask();
+                    subtask.setTitle(subtaskName);
+                    subtask.setStatus(false);
+                    subtask.setTask(task);
+                    subtaskList.add(subtask);
+
+                }
+            }
             String message = String.format("Здравствуйте, вам было дано новое задание - %s",task1.getTitle());
             mailSender.send(students.get(i).getEmail(),"Новое задание!",message);
 
@@ -170,6 +183,7 @@ public class TeacherController {
         }
         taskFileRepo.saveAll(taskFiles);
         taskRepo.saveAll(tasks);
+        subtaskRepo.saveAll(subtaskList);
         /*task.setGroup(group);
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
@@ -205,8 +219,12 @@ public class TeacherController {
         model.addAttribute("group",group);
 
         List<TaskFile> taskFiles = taskFileService.getTaskFilesByTask(task);
+        List<Subtask> subtasks = subtaskService.getSubtasksByTask(task);
+        System.out.println("subtasks:");
+        System.out.println(subtasks);
 
         model.addAttribute("taskFiles",taskFiles);
+        model.addAttribute("subtasks",subtasks);
 
         if(task.getStatus()!=TaskStatus.FINISHED){
             task.setGrade(null);
@@ -216,9 +234,22 @@ public class TeacherController {
     }
 
     @PatchMapping("/tasks/{id}")
-    public String editTask(@PathVariable("id")Long id,Model model,Task task,@PathVariable("group")Group group){
+    public String editTask(@PathVariable("id")Long id,Model model,Task task,@PathVariable("group")Group group,@RequestParam(name = "subtask[]",required = false)boolean[] subtaskStatuses,@RequestParam(name = "subtaskIndexes[]",required = false)boolean[] subtaskIndexes){
         //model.addAttribute("task",task);
+        System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+        System.out.println(Arrays.toString(subtaskStatuses));
+        List<Subtask> subtaskList = subtaskService.getSubtasksByTaskId(id);
 
+        System.out.println("before");
+        System.out.println(subtaskList);
+        for(int i = 0; i < subtaskList.size(); i++){
+            if(subtaskStatuses!=null)
+            subtaskList.get(i).setStatus(subtaskStatuses[i]);
+            else subtaskList.get(i).setStatus(false);
+        }
+        System.out.println("after");
+        System.out.println(subtaskList);
+        subtaskRepo.saveAll(subtaskList);
         model.addAttribute("task",task);
         taskService.update(id,task);
         if (task.getGrade()!=null){
@@ -351,9 +382,32 @@ public class TeacherController {
         int statusExpired = 0;
         int progressWorking = 0;
         int progressStuck = 0;
+        float gradeCounter = 0;
+        float gradeSum = 0;
+        float avgScore;
 
         for(int i=0;i<tasks.size();i++){
             Task task = tasks.get(i);
+            String title = tasks.get(0).getTitle();
+            LocalDate deadline = tasks.get(0).getDeadline();
+            LocalDateTime start = tasks.get(0).getStart();
+
+            model.addAttribute("title",title);
+            model.addAttribute("deadline",deadline);
+            model.addAttribute("start",start);
+            if(task.getGrade()!=null){
+                gradeCounter++;
+                System.out.println(task.getGrade());
+                if (task.getGrade().equals(Grade.PASSABLY)) {
+                    gradeSum+=3;
+                }
+                else if(task.getGrade().equals(Grade.GOOD)){
+                    gradeSum+=4;
+                }
+                else if(task.getGrade().equals(Grade.EXCELLENT)){
+                    gradeSum+=5;
+                }
+            }
             switch (task.getStatus()){
                 case ACTIVE -> {
                     statusActive++;
@@ -387,6 +441,12 @@ public class TeacherController {
 
 
 
+        }
+        if(gradeCounter!=0) {
+            avgScore = gradeSum / gradeCounter;
+            System.out.println("gradeSum: " + gradeSum);
+            System.out.println("gradeCounter: " + gradeCounter);
+            System.out.println("avgScore: " + avgScore);
         }
         model.addAttribute("statusActive",statusActive);
         model.addAttribute("statusCompleted",statusCompleted);

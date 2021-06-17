@@ -40,9 +40,10 @@
                     <input type="text" name="description"/>
                 </label>
                 <label> Файл
-                    <input type="file" name="file[]"/>
+                    <input type="file" name="file"/>
                 </label>
-                <input type="button" id="addfields" value="Добавить поле" />
+                <label>Подзадачи</label>
+                <input type="button" id="addfields" value="Добавить подзадачу" />
                 <div id="new_fields">
                 </div>
                 <input type="submit" value="Создать">
@@ -55,6 +56,35 @@
 
 </main>
 
-<script type="text/javascript" src="fields.js"></script>
+<script type="text/javascript">
+    function addfields() {
+
+        var p = d.createElement('p'),
+            cloneField = field.cloneNode();
+       // cloneField.setAttribute("name","subtask["+counter+"]");
+        cloneField.setAttribute("name","subtask[]");
+        cloneField.value = '';
+       // p.setAttribute('name','subtask');
+        p.appendChild(cloneField);
+        newFields.appendChild(p);
+
+        counter+=1;
+
+        //alert(counter);
+        return false;
+    }
+    var d = document,
+        myForm = d.getElementById('myform'),
+        newFields = myForm.querySelector('#new_fields'),
+        field = myForm.querySelector('input[type=text]'),
+
+        butAdd = d.getElementById('addfields'),
+        counter = 0;
+
+    butAdd.addEventListener('click', addfields, false);
+
+
+
+</script>
 </body>
 </html>

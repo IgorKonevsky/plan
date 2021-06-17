@@ -10,15 +10,29 @@
 <div th:insert="~{/fragments/navbar-teacher}"></div>
 
 
-
+<main>
+    <div class="filter">
 <div>
+    <div>
+        <h5>Название:</h5>
+        <h6 th:text="${title}"></h6>
+    </div>
+    <div>
+        <h5>Дата начала:</h5>
+        <h6 th:text="${start}"></h6>
+    </div>
+    <div>
+        <h5>Дедлайн:</h5>
+        <h6 th:text="${deadline}"></h6>
+    </div>
     <h5>Активно:</h5>
     <p th:text="${statusActive}"></p>
-    <td>
+
+    <div>
         <form th:method="GET" th:action="@{/group/{groupId}/teacher/stats/tasks/{code}/active(code = ${code},groupId = ${group.getId()})}">
             <input type="submit" value="Подробнее"/>
         </form>
-    </td>
+    </div>
 </div>
 <div>
     <h5>Выполнено:</h5>
@@ -42,13 +56,14 @@
     </form>
 </div>
 <div>
-    <h5>Застрявших студентов:</h5>
+    <h5>Возникли трудности:</h5>
     <p th:text="${progressStuck}"></p>
     <form th:method="GET" th:action="@{/group/{groupId}/teacher/stats/tasks/{code}/stuck(code = ${code},groupId = ${group.getId()})}">
         <input type="submit" value="Подробнее"/>
     </form>
 </div>
-
+    </div>
+</main>
 
 
 

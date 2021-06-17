@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Table
-@Data
+
 public class Comment {
     @Id
     @Column(name = "id")
@@ -58,5 +58,13 @@ public class Comment {
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    public CommentFile getCommentFile() {
+        return commentFile;
+    }
+
+    public void setCommentFile(CommentFile commentFile) {
+        this.commentFile = commentFile;
     }
 }

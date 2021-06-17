@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Профиль</title>
+  <div th:insert="~{/fragments/layout :: stylefrag}"></div>
+</head>
+<body>
+
+<main>
+
+  <div class="filter">
+    <div class="already"><a href="/">Стартовая страница</a></div>
+
+    <form>
+      <label>Username
+        <input type="text" placeholder="Введите username">
+      </label>
+      <label>Почта
+        <input type="email" placeholder="Введите почту">
+      </label>
+      <label>Имя
+        <input type="text" placeholder="Введите имя">
+      </label>
+      <label>Фамилия
+        <input type="text" placeholder="Введите фамилию">
+      </label>
+      <label>Новый Пароль
+        <input type="password" placeholder="Введите Новый Пароль">
+      </label>
+      <label>Текущий Пароль
+        <input type="password" placeholder="Введите Текущий Пароль">
+      </label>
+
+
+
+        <input type="submit" value="Сохранить">
+
+    </form>
+
+
+
+
+  </div>
+
+</main>
+
+
+
+</body>
+</html>

@@ -8,6 +8,10 @@
 </head>
 <body>
 <div th:insert="~{/fragments/navbar-teacher}"></div>
+
+<main>
+  <div class="filter">
+    <h4>Возникли трудности</h4>
 <div th:if="${tasks.size()>0}">
 <div>
   <h5>Название:</h5>
@@ -57,6 +61,9 @@
 <div th:if="${tasks.size()<=0}" >
   <h5>Студентов, застрявших на выполнении данного задания, пока нет</h5>
 </div>
+
+  </div>
+</main>
 
 </body>
 </html>

@@ -12,131 +12,149 @@
 
 <main>
   <div class="filter">
-<div th:if="${task.getCommon()}">
-  <h5>Название задания</h5>
-  <p th:text="${task.getTitle()}"></p>
-  <h5>Дата начала</h5>
-  <p th:text="${task.getStart()}"></p>
-  <h5>Дедлайн</h5>
-  <p th:text="${task.getDeadline()}"></p>
-  <h5>Опсание</h5>
-  <p th:text="${task.getDescription()}"></p>
-</div>
-<form th:method="PATCH" th:action="@{/group/{groupId}/teacher/tasks/{id}(id=${task.getId()},groupId = ${group.getId()})}" th:object="${task}" th:name="main">
+    <div th:if="${task.getCommon()}">
+      <h5>Название задания</h5>
+      <p th:text="${task.getTitle()}"></p>
+      <h5>Дата начала</h5>
+      <p th:text="${task.getStart()}"></p>
+      <h5>Дедлайн</h5>
+      <p th:text="${task.getDeadline()}"></p>
+      <h5>Опсание</h5>
+      <p th:text="${task.getDescription()}"></p>
+    </div>
+    <form th:method="PATCH" th:action="@{/group/{groupId}/teacher/tasks/{id}(id=${task.getId()},groupId = ${group.getId()})}" th:object="${task}" th:name="main">
 
-  <div th:if="*{common==null}">
-  <label> Название
-    <input type="text" th:field="*{title}" id="title"/>
-  </label>
+      <div th:if="*{common==null}">
+        <h5> Название
+          <input type="text" th:field="*{title}" id="title"/>
+        </h5>
 
-  <label> Дедлайн
-    <input type="date" th:field="*{deadline}" id="deadline"/>
-  </label>
-  <label> Описание
-    <input type="text" th:field="*{description}" id="description"/>
-  </label>
-  </div>
-  <input type="hidden" th:field="*{start}" id="start">
-  <label> Статус
+        <h5> Дедлайн
+          <input type="date" th:field="*{deadline}" id="deadline"/>
+        </h5>
+        <h5> Описание
+          <input type="text" th:field="*{description}" id="description"/>
+        </h5>
+      </div>
+      <input type="hidden" th:field="*{start}" id="start">
+      <h5> Статус
 
-      <select id="status" name="status">
-        <div th:if="${task.isActive()}">
-        <option th:value="ACTIVE" th:text="Активно" selected></option>
+        <select id="status" name="status">
+          <div th:if="${task.isActive()}">
+            <option th:value="ACTIVE" th:text="Активно" selected></option>
 
-          <option th:value="FINISHED" th:text="Завершено"></option>
+            <option th:value="FINISHED" th:text="Завершено"></option>
+          </div>
+          <div th:if="${task.isCompleted()}">
+            <option th:value="ACTIVE" th:text="Активно" ></option>
+
+            <option th:value="FINISHED" th:text="Завершено"></option>
+          </div>
+          <div th:if="${task.isFinished()}">
+            <option th:value="ACTIVE" th:text="Активно"></option>
+
+            <option th:value="FINISHED" th:text="Завершено" selected></option>
+          </div>
+          <div th:if="${task.isExpired()}">
+            <option th:value="ACTIVE" th:text="Активно"></option>
+
+            <option th:value="FINISHED" th:text="Завершено"></option>
+            <option th:value="EXPIRED" th:text="Просрочено" selected disabled></option>
+          </div>
+
+        </select>
+
+      </h5>
+      <div th:if="${subtasks.size()>0}">
+        <h5> Список подзадач:
+          <div th:each="subtask :${subtasks}">
+            <br>
+
+            <input type="checkbox" id="subtask[]" th:checked="${subtask.isStatus()}" th:text="${subtask.title}" name="subtask[]"/>
+
+
+          </div>
+        </h5>
+      </div>
+      <div th:if="${task.getDelivery()}">
+        <h5>Дата сдачи:</h5>
+        <a th:text="*{delivery}"></a>
+      </div>
+
+
+
+      <div th:if="${task.isCompletedOrFinished()}">
+        <div th:if="${task.getGrade()}">
+          <h5>Текущая оценка:</h5>
+          <p th:text="${task.grade}"></p>
         </div>
-        <div th:if="${task.isCompleted()}">
-          <option th:value="ACTIVE" th:text="Активно" ></option>
+        <h5>Выберите оценку
+          <select id="grade" name="grade">
+            <option selected disabled>Выберите оценку</option>
+            <option th:value="EXCELLENT" th:text="Отлично"></option>
+            <option th:value="GOOD" th:text="Хорошо"></option>
+            <option th:value="PASSABLY" th:text="Удовлетворительно"></option>
+          </select>
+        </h5>
+      </div>
+      <br>
+      <input type="hidden" th:field="*{progress}" id="progress">
+      <input type="hidden" th:field="*{student}" id="student">
+      <input type="hidden" th:field="*{teacher}" id="teacher">
+      <input type="hidden" th:field="*{title}" id="title">
+      <input type="hidden" th:field="*{description}" id="description">
+      <input type="hidden" th:field="*{deadline}" id="deadline">
 
-          <option th:value="FINISHED" th:text="Завершено"></option>
+
+      <div th:if="${task.isCompleted() || task.isCompleted()}">
+        <input type="hidden" th:field="*{delivery}" id="delivery">
+      </div>
+      <div th:if="${task.getCommon()}">
+        <input type="hidden" th:field="*{common}" id="common">
+      </div>
+
+      <input type="submit" value="Сохранить" name="saveButton"/>
+    </form>
+
+
+    <form th:method="DELETE" th:action="@{/group/{groupId}/teacher/tasks/{id}(id=${task.getId()},groupId = ${group.getId()})}">
+      <input type="submit" value="Удалить" />
+    </form>
+    <div  th:if="${taskFiles}">
+    <h5>Прикрепленный файл
+      <br>
+      <div th:each="file :${taskFiles}">
+        <a th:href="@{/taskfile/{id}(id=${file.getId()})}" th:text="${file.getOriginalname()}"></a>
+
+      </div>
+    </h5>
+    </div>
+    <div>
+      <form th:method="POST" th:action="@{/comment/{id}(id=${task.getId()})}" enctype="multipart/form-data">
+        <div>
+          <h5> Введите комментарий
+            <input type="text" name="text"/>
+            <input type="file" name="file">
+            <input type="submit" value="Добавить"/>
+          </h5>
         </div>
-        <div th:if="${task.isFinished()}">
-          <option th:value="ACTIVE" th:text="Активно"></option>
-
-          <option th:value="FINISHED" th:text="Завершено" selected></option>
-        </div>
-        <div th:if="${task.isExpired()}">
-          <option th:value="ACTIVE" th:text="Активно"></option>
-
-          <option th:value="FINISHED" th:text="Завершено"></option>
-          <option th:value="EXPIRED" th:text="Просрочено" selected disabled></option>
-        </div>
-
-      </select>
-    <div th:if="${task.getDelivery()}">
-      <h5>Дата сдачи:</h5>
-      <a th:text="*{delivery}"></a>
+      </form>
     </div>
 
 
-  </label>
-  <div th:if="${task.isCompletedOrFinished()}">
-    <div th:if="${task.getGrade()}">
-      <div>Текущая оценка:</div>
-    <p th:text="${task.grade}"></p>
+
+
+
+    <div>
+      <br>
+      <div th:each="comment :${comments}">
+        <h6 th:text="${comment.getAuthor().getFullname()}"></h6>
+        <p th:if="${comment.getText()}" th:text="${comment.getText()}"></p>
+        <a th:if="${comment.getCommentFile()}" th:text="${comment.getCommentFile().getOriginalname()}" th:href="@{/commentfile/{id}(id=${comment.getCommentFile().getId()})}"></a>
+      </div>
     </div>
-  <label>Выберите оценку
-  <select id="grade" name="grade">
-    <option selected disabled>Выберите оценку</option>
-    <option th:value="EXCELLENT" th:text="Отлично"></option>
-    <option th:value="GOOD" th:text="Хорошо"></option>
-    <option th:value="PASSABLY" th:text="Удовлетворительно"></option>
-  </select>
-  </label>
-  </div>
-  <br>
-  <input type="hidden" th:field="*{progress}" id="progress">
-  <input type="hidden" th:field="*{student}" id="student">
-  <input type="hidden" th:field="*{teacher}" id="teacher">
-  <input type="hidden" th:field="*{title}" id="title">
-  <input type="hidden" th:field="*{description}" id="description">
-  <input type="hidden" th:field="*{deadline}" id="deadline">
-
-  <div th:if="${task.isCompleted() || task.isCompleted()}">
-  <input type="hidden" th:field="*{delivery}" id="delivery">
-  </div>
-  <div th:if="${task.getCommon()}">
-    <input type="hidden" th:field="*{common}" id="common">
-  </div>
-
-  <input type="submit" value="Сохранить" name="saveButton"/>
-</form>
-
-
-<form th:method="DELETE" th:action="@{/group/{groupId}/teacher/tasks/{id}(id=${task.getId()},groupId = ${group.getId()})}">
-  <input type="submit" value="Удалить" />
-</form>
-<div>Список прикрепленных файлов
-  <br>
-  <div th:each="file :${taskFiles}">
-    <a th:href="@{/taskfile/{id}(id=${file.getId()})}" th:text="${file.getOriginalname()}"></a>
-
-  </div>
-</div>
-<div>
-<form th:method="POST" th:action="@{/comment/{id}(id=${task.getId()})}" enctype="multipart/form-data">
-  <label> Введите комментарий
-    <input type="text" name="text"/>
-    <input type="file" name="file">
-    <input type="submit" value="Добавить"/>
-  </label>
-
-</form>
-</div>
-
-
-
-
-
-<div>
-  <br>
-  <div th:each="comment :${comments}">
-    <h6 th:text="${comment.getAuthor().getFullname()}"></h6>
-    <p th:if="${comment.getText()}" th:text="${comment.getText()}"></p>
-    <a th:if="${comment.getCommentFile()}" th:text="${comment.getCommentFile().getOriginalname()}" th:href="@{/commentfile/{id}(id=${comment.getCommentFile().getId()})}"></a>
-  </div>
-</div>
   </div>
 </main>
+
 </body>
 </html>

@@ -9,7 +9,11 @@
 <body>
 <div th:insert="~{/fragments/navbar-student}"></div>
 
+<main>
+
+    <div class="filter">
 <div>
+    <h5>Активные задания</h5>
     <table class="table">
         <thead>
         <tr>
@@ -17,7 +21,7 @@
             <th scope="col">Название</th>
             <th scope="col">Дата начала</th>
             <th scope="col">Дедлайн</th>
-            <th scope="col">Статус</th>
+
 
 
         </tr>
@@ -28,7 +32,6 @@
             <td th:text="${task.getTitle()}">value</td>
             <td th:text="${task.getStart()}">value</td>
             <td th:text="${task.getDeadline()}">value</td>
-            <td th:text="${task.getStatus()}">value</td>
 
             <td>
                 <form th:method="GET" th:action="@{/group/{groupId}/student/tasks/{id}(id = ${task.getId()},groupId = ${group.getId()})}">
@@ -41,6 +44,7 @@
         </tbody>
     </table>
 </div>
-
+    </div>
+</main>
 </body>
 </html>

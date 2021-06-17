@@ -9,13 +9,15 @@
 <body>
 <div th:insert="~{/fragments/navbar-teacher}"></div>
 
+<main>
+    <div class="filter">
 <div>
     <table class="table">
         <thead>
         <tr>
 
             <th scope="col">Название задания</th>
-            <th scope="col">Ссылка</th>
+
 
 
         </tr>
@@ -26,7 +28,17 @@
 
             <td>
                 <form th:method="GET" th:action="@{/group/{groupId}/teacher/stats/tasks/{code}(code = ${task.getCommon()},groupId = ${group.getId()})}">
-                    <input type="submit" value="Посмотреть статистику по заданию"/>
+                    <input type="submit" value="Посмотреть информацию по заданию"/>
+                </form>
+            </td>
+            <td>
+                <form th:method="DELETE" th:action="@{/group/{groupId}/teacher/stats/tasks/{code}(code = ${task.getCommon()},groupId = ${group.getId()})}">
+                    <input type="submit" value="Редактировать задание"/>
+                </form>
+            </td>
+            <td>
+                <form th:method="DELETE" th:action="@{/group/{groupId}/teacher/stats/tasks/{code}(code = ${task.getCommon()},groupId = ${group.getId()})}">
+                    <input type="submit" value="Удалить задание"/>
                 </form>
             </td>
 
@@ -37,6 +49,8 @@
         </tbody>
     </table>
 </div>
+    </div>
+</main>
 
 
 </body>

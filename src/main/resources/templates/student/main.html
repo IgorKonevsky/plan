@@ -15,9 +15,51 @@
 
 
 
-Hello
-<p th:text="${user.getFullname()}">user</p>
-<p th:text="${group.getTitle()}">value</p>
+<main>
+    <div class="filter">
+        <div>
+            <table class="table">
+                <thead>
+                <tr>
+
+                    <th scope="col">Название</th>
+                    <th scope="col">Дата начала</th>
+                    <th scope="col">Дедлайн</th>
+
+
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="task :${newTasks}">
+
+                    <td th:text="${task.getTitle()}">value</td>
+                    <td th:text="${task.getStart()}">value</td>
+                    <td th:text="${task.getDeadline()}">value</td>
+
+
+                    <td>
+                        <form th:method="GET" th:action="@{/group/{groupId}/student/tasks/{id}(id = ${task.getId()},groupId = ${group.getId()})}">
+                            <input type="submit" value="Открыть страницу с заданием"/>
+                        </form>
+                    </td>
+
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+
+    </div>
+
+
+
+
+</main>
 
 
 </body>

@@ -9,6 +9,6 @@ function addfields() {
 var d = document,
     myForm = d.getElementById('myform'),
     newFields = myForm.querySelector('#new_fields'),
-    field = myForm.querySelector('input[type=file]'),
+    field = myForm.querySelector('input[type=text]'),
     butAdd = d.getElementById('addfields');
 butAdd.addEventListener('click', addfields, false);

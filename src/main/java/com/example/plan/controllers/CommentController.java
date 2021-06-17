@@ -76,7 +76,7 @@ public class CommentController {
         else {
             String subject = "Новый комментарий!";
             String message = String.format("Преподаватель %s из группы %s добавил новый комментарий к заданию %s\nСсылка - %s",task.getTeacher().getFullname(),task.getGroup().getTitle(),task.getTitle(),"http://localhost:8080/group/"+task.getGroup().getId()+"/teacher/tasks/" + task.getId());
-            mailSender.send(task.getTeacher().getEmail(),subject,message);
+            mailSender.send(task.getStudent().getEmail(),subject,message);
             return "redirect:/group/"+task.getGroup().getId()+"/teacher/tasks/" + task.getId();
         }
 
