@@ -29,6 +29,9 @@
                         <form th:method="GET" th:action="@{/group/{id}/teacher/students(id=${group.getId()})}">
                             <button type="submit"><a class="nav-link">Студенты</a></button>
                         </form>
+                        <form th:method="GET" th:action="@{/group/{id}/teacher/materials(id=${group.getId()})}">
+                            <button type="submit"><a class="nav-link">Материалы</a></button>
+                        </form>
 
 
 

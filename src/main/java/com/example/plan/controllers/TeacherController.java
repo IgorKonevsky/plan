@@ -60,6 +60,12 @@ public class TeacherController {
     @Autowired
     private SubtaskService subtaskService;
 
+    @Autowired
+    private MaterialRepo materialRepo;
+
+    @Autowired
+    private MaterialService materialService;
+
 
     @Autowired
     private MailSender mailSender;
@@ -550,6 +556,39 @@ public class TeacherController {
         model.addAttribute("tasks",tasks);
         model.addAttribute("code",code);
         return "/teacher/common-task-stuck";
+    }
+
+    @GetMapping("/materials")
+    public String materialsPage(@PathVariable("group")Group group,Model model){
+        List<Material> materials = materialService.getMaterialsByGroup(group);
+        model.addAttribute("materials",materials);
+
+
+        return "/teacher/materials";
+    }
+
+    @PostMapping("/material")
+    public String uploadMaterial(@PathVariable("group")Group group,@RequestParam(name = "file") MultipartFile file,Material material1) throws IOException {
+
+        if(file!=null){
+            Material material = new Material();
+            File uploadDir = new File(uploadPath);
+
+            if(!uploadDir.exists()){
+                uploadDir.mkdir();
+            }
+            String uuidFile = UUID.randomUUID().toString();
+            String resultFilename = uuidFile + "." + file.getOriginalFilename();
+            file.transferTo(new File(uploadPath + "/" + resultFilename));
+            material.setFilename(resultFilename);
+            material.setOriginalname(file.getOriginalFilename());
+            material.setGroup(group);
+            material.setTitle(material1.getTitle());
+            material.setDescription(material1.getDescription());
+            materialRepo.save(material);
+        }
+        return "redirect:/group/"+group.getId()+"/teacher/materials";
+
     }
 
     /*@GetMapping("/stats/students")

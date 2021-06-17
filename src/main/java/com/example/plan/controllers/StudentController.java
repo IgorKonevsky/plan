@@ -36,6 +36,12 @@ public class StudentController {
     @Autowired
     private SubtaskService subtaskService;
 
+    @Autowired
+    private MaterialRepo materialRepo;
+
+    @Autowired
+    private MaterialService materialService;
+
 
     @GetMapping("/tasks")
     public String allTasks(@PathVariable("group")Group group,Model model){
@@ -132,6 +138,14 @@ public class StudentController {
         return "redirect:/group/"+task.getGroup().getId()+"/student/tasks/"+task.getId();
         //return "redirect:/main";
         //return "redirect:/teacher/tasks/student/"+task.getStudent_id();
+    }
+    @GetMapping("/materials")
+    public String materialsPage(@PathVariable("group")Group group,Model model){
+        List<Material> materials = materialService.getMaterialsByGroup(group);
+        model.addAttribute("materials",materials);
+
+
+        return "/student/materials";
     }
 
 }

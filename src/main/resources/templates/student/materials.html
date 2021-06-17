@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <div th:insert="~{/fragments/layout :: stylefrag}"></div>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <link rel="stylesheet" href = "https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+</head>
+<body>
+
+<div th:insert="~{/fragments/navbar-student}"></div>
+
+<main>
+
+  <div class="filter">
+
+
+
+    <div> <h5>Материалы</h5>
+      <table class="table">
+        <thead>
+        <tr>
+
+          <th scope="col">Название</th>
+          <th scope="col">Описание</th>
+
+
+
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="material :${materials}">
+
+          <td th:text="${material.getTitle()}">value</td>
+          <td th:text="${material.getDescription()}">value</td>
+
+
+
+          <td>
+            <form th:method="GET" th:action="@{/group/{groupId}/material/{id}(id = ${material.getId()},groupId = ${group.getId()})}">
+              <input type="submit" value="Скачать"/>
+            </form>
+          </td>
+
+
+
+
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+
+  </div>
+</main>
+
+</body>
+</html>

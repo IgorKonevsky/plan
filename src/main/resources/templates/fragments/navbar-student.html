@@ -18,6 +18,9 @@
                     <form th:method="GET" th:action="@{/group/{id}/student/tasks(id=${group.getId()})}">
                         <button type="submit"><a class="nav-link">Задания</a></button>
                     </form>
+                    <form th:method="GET" th:action="@{/group/{id}/student/materials(id=${group.getId()})}">
+                        <button type="submit"><a class="nav-link">Материалы</a></button>
+                    </form>
 
 
                     <a class="nav-link" href="/">Стартовая страница</a>

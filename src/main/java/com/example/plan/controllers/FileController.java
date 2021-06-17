@@ -2,6 +2,7 @@ package com.example.plan.controllers;
 
 
 import com.example.plan.entities.CommentFile;
+import com.example.plan.entities.Material;
 import com.example.plan.entities.TaskFile;
 import com.example.plan.repos.TaskFileRepo;
 import com.example.plan.services.TaskFileService;
@@ -54,6 +55,21 @@ public class FileController {
 
         return "redirect:/";
     }
+    @GetMapping("/material/{id}")
+    public String downloadMaterial(@PathVariable("id") Material material, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        File file = new File(uploadPath+"/"+material.getFilename());
+
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", String.format("inline; filename=\"" + file.getName() + "\""));
+        response.setContentLength((int) file.length());
+        InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+        FileCopyUtils.copy(inputStream, response.getOutputStream());
+
+        return "redirect:/";
+    }
+
+//   @PostMapping("/group/{id}/material")
+//    public String uploadMaterial
 
 
 
