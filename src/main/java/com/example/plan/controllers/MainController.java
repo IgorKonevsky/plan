@@ -126,7 +126,8 @@ public class MainController {
     }
 
     @GetMapping("/profile")
-    public String profilePage(@AuthenticationPrincipal User user){
+    public String profilePage(@AuthenticationPrincipal User user,Model model){
+        model.addAttribute("user",user);
 
         return "profile";
     }

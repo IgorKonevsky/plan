@@ -36,7 +36,7 @@
                 </form>
             </td>
             <td>
-                <form th:method="DELETE" th:action="@{/group/{groupId}/teacher/tasks/student/{id}(id = ${student.getId()},groupId = ${group.getId()})}">
+                <form th:method="DELETE" th:action="@{/group/{groupId}/teacher/students/{id}(id = ${student.getId()},groupId = ${group.getId()})}">
                     <input type="submit" value="Удалить из группы"/>
                 </form>
             </td>

@@ -50,6 +50,7 @@
                     <thead>
                     <tr>
                         <th scope="col">Название</th>
+                        <th scope="col">Код</th>
 
 
                     </tr>
@@ -57,6 +58,7 @@
                     <tbody>
                     <tr th:each="groupTeacher :${groupsTeacher}">
                         <td th:text="${groupTeacher.getTitle()}">value</td>
+                        <td th:text="${groupTeacher.getCode()}">value</td>
 
 
                         <td>
@@ -83,13 +85,14 @@
                     <thead>
                     <tr>
                         <th scope="col">Название</th>
-
+                        <th scope="col">Код</th>
 
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="groupStudent :${groupsStudent}">
                         <td th:text="${groupStudent.getTitle()}">value</td>
+                        <td th:text="${groupStudent.getCode()}">value</td>
 
 
                         <td>

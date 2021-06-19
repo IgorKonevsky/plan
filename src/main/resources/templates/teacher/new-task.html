@@ -10,19 +10,58 @@
 <div th:insert="~{/fragments/navbar-teacher}"></div>
 <main>
     <div class="filter">
-<form th:method="POST" th:action="@{/group/{groupId}/teacher/tasks/student/{id}(id=${student.getId()},groupId = ${group.getId()})}" th:object="${task}">
-    <label> Название
-        <input type="text" th:field="*{title}" id="title"/>
-    </label>
-    <label> Дедлайн
-        <input type="date" th:field="*{deadline}" id="deadline"/>
-    </label>
-    <label> Описание
-        <input type="text" th:field="*{description}" id="description"/>
-    </label>
-    <input type="submit" value="Создать" />
-</form>
+
+        <form id="myform" th:method="POST" th:action="@{/group/{groupId}/teacher/tasks/student/{id}(id=${student.getId()},groupId = ${group.getId()})}" enctype="multipart/form-data">
+            <label> Название
+                <input type="text" name="title"/>
+            </label>
+            <label> Дедлайн
+                <input type="date" name="deadline"/>
+            </label>
+            <label> Описание
+                <textarea name="description" wrap="soft" rows="10" cols="60"></textarea>
+            </label>
+            <label> Файл
+                <input type="file" name="file"/>
+            </label>
+            <label>Подзадачи</label>
+            <input type="button" id="addfields" value="Добавить подзадачу" />
+            <div id="new_fields">
+            </div>
+            <input type="submit" value="Создать">
+
+        </form>
     </div>
 </main>
+<script type="text/javascript">
+    function addfields() {
+
+        var p = d.createElement('p'),
+            cloneField = field.cloneNode();
+        // cloneField.setAttribute("name","subtask["+counter+"]");
+        cloneField.setAttribute("name","subtask[]");
+        cloneField.value = '';
+        // p.setAttribute('name','subtask');
+        p.appendChild(cloneField);
+        newFields.appendChild(p);
+
+        counter+=1;
+
+        //alert(counter);
+        return false;
+    }
+    var d = document,
+        myForm = d.getElementById('myform'),
+        newFields = myForm.querySelector('#new_fields'),
+        field = myForm.querySelector('input[type=text]'),
+
+        butAdd = d.getElementById('addfields'),
+        counter = 0;
+
+    butAdd.addEventListener('click', addfields, false);
+
+
+
+</script>
 </body>
 </html>

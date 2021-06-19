@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Профиль</title>
@@ -12,18 +13,18 @@
   <div class="filter">
     <div class="already"><a href="/">Стартовая страница</a></div>
 
-    <form>
+    <form th:method="PATCH"  th:object="${user}">
       <label>Username
-        <input type="text" placeholder="Введите username">
+        <input type="text" th:value="*{username}">
       </label>
       <label>Почта
-        <input type="email" placeholder="Введите почту">
+        <input type="email" th:value="*{email}">
       </label>
       <label>Имя
-        <input type="text" placeholder="Введите имя">
+        <input type="text" th:value="*{firstname}">
       </label>
       <label>Фамилия
-        <input type="text" placeholder="Введите фамилию">
+        <input type="text" th:value="*{lastname}">
       </label>
       <label>Новый Пароль
         <input type="password" placeholder="Введите Новый Пароль">

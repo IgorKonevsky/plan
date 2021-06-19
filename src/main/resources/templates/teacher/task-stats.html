@@ -32,12 +32,12 @@
                 </form>
             </td>
             <td>
-                <form th:method="DELETE" th:action="@{/group/{groupId}/teacher/stats/tasks/{code}(code = ${task.getCommon()},groupId = ${group.getId()})}">
+                <form th:method="GET" th:action="@{/group/{groupId}/teacher/editcommon/{code}(code = ${task.getCommon()},groupId = ${group.getId()})}">
                     <input type="submit" value="Редактировать задание"/>
                 </form>
             </td>
             <td>
-                <form th:method="DELETE" th:action="@{/group/{groupId}/teacher/stats/tasks/{code}(code = ${task.getCommon()},groupId = ${group.getId()})}">
+                <form th:method="DELETE" th:action="@{/group/{groupId}/teacher/deletecommon/{code}(code = ${task.getCommon()},groupId = ${group.getId()})}">
                     <input type="submit" value="Удалить задание"/>
                 </form>
             </td>

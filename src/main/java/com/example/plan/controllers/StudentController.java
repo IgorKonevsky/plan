@@ -117,10 +117,16 @@ public class StudentController {
     }
 
     @PatchMapping("/tasks/{id}")
-    public String editTask(@PathVariable("id")Long id,Model model,Task task){
+    public String editTask(@PathVariable("id")Long id,Model model,Task task,@RequestParam(name = "subtask[]",required = false)boolean[] subtaskStatuses,@RequestParam(name = "subtaskIndexes[]",required = false)boolean[] subtaskIndexes){
         //model.addAttribute("task",task);
         model.addAttribute("task",task);
-
+        List<Subtask> subtaskList = subtaskService.getSubtasksByTaskId(id);
+        for(int i = 0; i < subtaskList.size(); i++){
+            if(subtaskStatuses!=null)
+                subtaskList.get(i).setStatus(subtaskStatuses[i]);
+            else subtaskList.get(i).setStatus(false);
+        }
+        subtaskRepo.saveAll(subtaskList);
         if(task.getStatus().equals(TaskStatus.COMPLETED)){
             LocalDate date = LocalDate.now();
             LocalTime time = LocalTime.now();

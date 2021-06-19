@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <div th:insert="~{/fragments/layout :: stylefrag}"></div>
+</head>
+<body>
+<div th:insert="~{/fragments/navbar-teacher}"></div>
+
+<main>
+
+  <div class="filter">
+
+
+    <form th:method="PATCH"  th:object="${task}">
+      <label>Название
+        <input type="text" th:value="*{title}">
+      </label>
+      <label>Дедлайн
+        <input type="date" th:value="*{deadline}">
+      </label>
+      <label>Описание
+        <input type="text" th:value="*{description}">
+      </label>
+      <div th:if="${task.getSubtasks()}">Подзадачи
+
+        <div th:each="subtask :${task.getSubtasks()}">
+          <br/>
+          <input type="text" th:value="${subtask.getTitle()}">
+        </div>
+      </div>
+
+
+
+
+      <input type="submit" value="Сохранить">
+
+    </form>
+
+
+
+
+  </div>
+
+</main>
+
+</body>
+</html>

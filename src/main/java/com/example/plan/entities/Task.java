@@ -60,6 +60,11 @@ public class Task {
     @OneToMany(mappedBy = "task")
     private List<Comment> comments;
 
+    @OneToMany(mappedBy = "task")
+    private List<Subtask> subtasks;
+
+
+
     @Column(name = "common")
     private String common;
 
@@ -223,5 +228,13 @@ public class Task {
 
     public void setGroup(Group group) {
         this.group = group;
+    }
+
+    public List<Subtask> getSubtasks() {
+        return subtasks;
+    }
+
+    public void setSubtasks(List<Subtask> subtasks) {
+        this.subtasks = subtasks;
     }
 }

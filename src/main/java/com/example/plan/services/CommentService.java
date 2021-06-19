@@ -16,7 +16,9 @@ public class CommentService {
     @Autowired
     private CommentRepo commentRepo;
 
-    public void create(Comment comment, User author, Task task, CommentFile commentFile){
+    public void create(String text, User author, Task task, CommentFile commentFile){
+        Comment comment = new Comment();
+        comment.setText(text);
         comment.setAuthor(author);
         comment.setTask(task);
         if(commentFile!=null);

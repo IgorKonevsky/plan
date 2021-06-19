@@ -26,14 +26,14 @@
     </thead>
     <tbody>
     <tr th:each="task :${tasks}">
-      <td th:each="student : ${students}" th:if="${task.getStudent_id()==student.getId()}" th:text="${student.getFullname()}">value</td>
+      <td th:each="student : ${students}" th:if="${task.getStudent()==student}" th:text="${student.getFullname()}">value</td>
       <td th:text="${task.getTitle()}">value</td>
       <td th:text="${task.getStart()}">value</td>
       <td th:text="${task.getDeadline()}">value</td>
       <td th:text="${task.getStatus()}">value</td>
       <td th:text="${task.getDescription()}">value</td>
       <td>
-        <form th:method="GET" th:action="@{/teacher/tasks/{id}(id = ${task.getId()})}">
+        <form th:method="GET" th:action="@{/group/{groupId}/teacher/tasks/{id}(groupId = ${group.getId()},id = ${task.getId()})}">
           <input type="submit" value="Открыть страницу с заданием"/>
         </form>
       </td>

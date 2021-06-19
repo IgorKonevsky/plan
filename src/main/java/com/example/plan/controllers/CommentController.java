@@ -40,8 +40,12 @@ public class CommentController {
     private String uploadPath;
 
     @PostMapping("/{id}")
-    public String create(@AuthenticationPrincipal User author, Comment comment, @RequestParam("file") MultipartFile file, @PathVariable("id")Task task) throws IOException {
-        if(comment.getText().trim().length()>0 || file!=null){
+    public String create(@AuthenticationPrincipal User author,@RequestParam("text")String text , @RequestParam("file") MultipartFile file, @PathVariable("id")Task task) throws IOException {
+        Comment comment = new Comment();
+        if(text.length()>0 || file!=null){
+            comment.setText(text);
+            comment.setTask(task);
+            comment.setAuthor(author);
 
             if(file!=null){
                 CommentFile commentFile = new CommentFile();
@@ -56,11 +60,16 @@ public class CommentController {
                 commentFile.setFilename(resultFilename);
                 commentFile.setOriginalname(file.getOriginalFilename());
                 commentFile.setComment(comment);
+
+                //commentService.create(comment, author,task, commentFile);
+                comment.setCommentFile(commentFile);
+                commentRepo.save(comment);
                 commentFileRepo.save(commentFile);
-                commentService.create(comment, author,task, commentFile);
             }
             else{
-                commentService.create(comment, author,task, null);
+                //commentService.create(comment, author,task, null);
+                comment.setCommentFile(null);
+                commentRepo.save(comment);
             }
 
 

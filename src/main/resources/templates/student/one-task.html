@@ -130,6 +130,7 @@
 <div>
   <br>
   <div th:each="comment :${comments}">
+    <br>
     <h6 th:text="${comment.getAuthor().getFullname()}"></h6>
     <p th:if="${comment.getText()}" th:text="${comment.getText()}"></p>
     <a th:if="${comment.getCommentFile()}" th:text="${comment.getCommentFile().getOriginalname()}" th:href="@{/commentfile/{id}(id=${comment.getCommentFile().getId()})}"></a>

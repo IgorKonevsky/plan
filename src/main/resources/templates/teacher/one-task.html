@@ -11,8 +11,11 @@
 
 
 <main>
+
   <div class="filter">
     <div th:if="${task.getCommon()}">
+      <h5>Имя Студента</h5>
+      <p th:text="${task.getStudent().getFullname()}"></p>
       <h5>Название задания</h5>
       <p th:text="${task.getTitle()}"></p>
       <h5>Дата начала</h5>
@@ -148,6 +151,7 @@
     <div>
       <br>
       <div th:each="comment :${comments}">
+        <br>
         <h6 th:text="${comment.getAuthor().getFullname()}"></h6>
         <p th:if="${comment.getText()}" th:text="${comment.getText()}"></p>
         <a th:if="${comment.getCommentFile()}" th:text="${comment.getCommentFile().getOriginalname()}" th:href="@{/commentfile/{id}(id=${comment.getCommentFile().getId()})}"></a>

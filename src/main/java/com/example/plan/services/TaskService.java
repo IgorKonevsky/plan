@@ -102,7 +102,7 @@ public class TaskService {
         List<Task> bufferList = taskRepo.findAll();
         for (int i = 0; i<bufferList.size(); i++){
             Task task = bufferList.get(i);
-            if(task.getGroup().equals(group) && task.getCommon().equals(code))
+            if(task.getGroup().equals(group) && !task.getCommon().equals("not")  && task.getCommon().equals(code))
                 finalList.add(task);
         }
 

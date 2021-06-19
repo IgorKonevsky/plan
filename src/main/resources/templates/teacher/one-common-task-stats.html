@@ -25,6 +25,10 @@
         <h5>Дедлайн:</h5>
         <h6 th:text="${deadline}"></h6>
     </div>
+    <div>
+        <h5>Описание:</h5>
+        <h6 th:text="${description}"></h6>
+    </div>
     <h5>Активно:</h5>
     <p th:text="${statusActive}"></p>
 
@@ -48,13 +52,7 @@
         <input type="submit" value="Подробнее"/>
     </form>
 </div>
-<div>
-    <h5>Завершено:</h5>
-    <p th:text="${statusFinished}"></p>
-    <form th:method="GET" th:action="@{/group/{groupId}/teacher/stats/tasks/{code}/finished(code = ${code},groupId = ${group.getId()})}">
-        <input type="submit" value="Подробнее"/>
-    </form>
-</div>
+
 <div>
     <h5>Возникли трудности:</h5>
     <p th:text="${progressStuck}"></p>
@@ -62,6 +60,13 @@
         <input type="submit" value="Подробнее"/>
     </form>
 </div>
+        <div>
+            <h5>Завершено:</h5>
+            <p th:text="${statusFinished}"></p>
+            <form th:method="GET" th:action="@{/group/{groupId}/teacher/stats/tasks/{code}/finished(code = ${code},groupId = ${group.getId()})}">
+                <input type="submit" value="Подробнее"/>
+            </form>
+        </div>
     </div>
 </main>
 

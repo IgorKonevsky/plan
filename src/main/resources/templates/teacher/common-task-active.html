@@ -8,6 +8,10 @@
 </head>
 <body>
 <div th:insert="~{/fragments/navbar-teacher}"></div>
+
+<main>
+  <div class="filter">
+
 <div th:if="${tasks.size()>0}">
 <div>
   <h5>Название:</h5>
@@ -53,6 +57,7 @@
     </tbody>
   </table>
 </div>
-
+  </div>
+</main>
 </body>
 </html>

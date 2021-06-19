@@ -40,6 +40,9 @@ public class TeacherController {
     private TaskService taskService;
 
     @Autowired
+    private CommentRepo commentRepo;
+
+    @Autowired
     private CommentService commentService;
 
     @Autowired
@@ -95,8 +98,9 @@ public class TeacherController {
     }
 
     @PostMapping("/tasks/student/{id}")
-    public String createTask(@AuthenticationPrincipal User teacher, Task task,@PathVariable("id") User student, Model model, @PathVariable("group")Group group){
-
+    public String createTask(@AuthenticationPrincipal User teacher, @RequestParam("title")String title,Task task1,@RequestParam("description")String description,@RequestParam(name = "subtask[]",required = false)String[] subtaskNames,@PathVariable("id") User student, Model model, @PathVariable("group")Group group){
+        Task task = new Task();
+        List<Subtask> subtaskList = new ArrayList<>();
         task.setGroup(group);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -112,9 +116,22 @@ public class TeacherController {
         task.setStudent(student);
         task.setStatus(TaskStatus.ACTIVE);
         task.setProgress(Progress.NOT_SELECTED);
+        task.setTitle(title);
+        task.setDeadline(task1.getDeadline());
+        task.setDescription(description);
+        if(subtaskNames!=null) {
+            for (String subtaskName : subtaskNames) {
+                Subtask subtask = new Subtask();
+                subtask.setTitle(subtaskName);
+                subtask.setStatus(false);
+                subtask.setTask(task);
+                subtaskList.add(subtask);
 
+            }
+        }
 
         taskRepo.save(task);
+        subtaskRepo.saveAll(subtaskList);
 
         return "redirect:/group/"+group.getId()+"/teacher/students";
     }
@@ -187,9 +204,14 @@ public class TeacherController {
             }
             tasks.add(task);
         }
-        taskFileRepo.saveAll(taskFiles);
+
+
         taskRepo.saveAll(tasks);
-        subtaskRepo.saveAll(subtaskList);
+        taskFileRepo.saveAll(taskFiles);
+        if(subtaskList!=null){
+            subtaskRepo.saveAll(subtaskList);
+        }
+
         /*task.setGroup(group);
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
@@ -279,8 +301,13 @@ public class TeacherController {
 
     @DeleteMapping("/students/{id}")
     public String removeStudent(@PathVariable("id")User student,@PathVariable("group")Group group){
-
-
+        List<Group> groups = student.getGroups();
+        for(int i=0;i<groups.size();i++){
+            if(groups.get(i).equals(group))
+                groups.remove(i);
+        }
+        student.setGroups(groups);
+        userRepo.save(student);
         return "redirect:/group/"+group.getId()+"/teacher/students";
     }
 
@@ -368,7 +395,7 @@ public class TeacherController {
         List<String> titles = new ArrayList<>();
         List<Task> commonTasks = new ArrayList<>();
         for(Task task : tasks){
-            if(task.getCommon()!=null && !codes.contains(task.getCommon())){
+            if(task.getCommon()!=null && !task.getCommon().equals("not") && !codes.contains(task.getCommon())){
                 codes.add(task.getCommon());
                 titles.add(task.getTitle());
                 commonTasks.add(task);
@@ -397,10 +424,13 @@ public class TeacherController {
             String title = tasks.get(0).getTitle();
             LocalDate deadline = tasks.get(0).getDeadline();
             LocalDateTime start = tasks.get(0).getStart();
+            String description = tasks.get(0).getDescription();
 
             model.addAttribute("title",title);
             model.addAttribute("deadline",deadline);
             model.addAttribute("start",start);
+            model.addAttribute("description",description);
+
             if(task.getGrade()!=null){
                 gradeCounter++;
                 System.out.println(task.getGrade());
@@ -589,6 +619,39 @@ public class TeacherController {
         }
         return "redirect:/group/"+group.getId()+"/teacher/materials";
 
+    }
+
+    @DeleteMapping("/material/{id}")
+    public String deleteMaterial(@PathVariable("group")Group group,@PathVariable("id")Material material){
+        materialRepo.delete(material);
+        return "redirect:/group/"+group.getId()+"/teacher/materials";
+    }
+
+    @GetMapping("/editcommon/{code}")
+    public String editCommonTask(@PathVariable("group")Group group,@PathVariable("code")String code,Model model){
+        List<Task> tasks = taskService.getTasksByCommonCode(group,code);
+        Task task = null;
+        if(tasks.size()>0){
+            task = tasks.get(0);
+        }
+        model.addAttribute("task",task);
+        return "/teacher/edit-common-task";
+    }
+
+    @DeleteMapping("/deletecommon/{code}")
+    public String deleteCommonTask(@PathVariable("group")Group group,@PathVariable("code")String code){
+
+        List<Task> tasks = taskService.getTasksByCommonCode(group,code);
+        for(int i=0; i<tasks.size(); i++){
+            Task task = tasks.get(i);
+            subtaskRepo.deleteAll(task.getSubtasks());
+            commentRepo.deleteAll(task.getComments());
+            taskFileRepo.deleteAll(taskFileService.getTaskFilesByTask(task));
+        }
+        taskRepo.deleteAll(tasks);
+
+
+        return "redirect:/group/"+group.getId()+"/teacher/stats/tasks";
     }
 
     /*@GetMapping("/stats/students")

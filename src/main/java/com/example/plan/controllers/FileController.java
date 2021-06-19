@@ -2,6 +2,7 @@ package com.example.plan.controllers;
 
 
 import com.example.plan.entities.CommentFile;
+import com.example.plan.entities.Group;
 import com.example.plan.entities.Material;
 import com.example.plan.entities.TaskFile;
 import com.example.plan.repos.TaskFileRepo;
@@ -31,7 +32,7 @@ public class FileController {
     private String uploadPath;
 
     @GetMapping("/taskfile/{id}")
-    public String downloadTaskFile(@PathVariable("id")TaskFile taskFile, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void downloadTaskFile(@PathVariable("id")TaskFile taskFile, HttpServletRequest request, HttpServletResponse response) throws IOException {
         File file = new File(uploadPath+"/"+taskFile.getFilename());
 
         response.setContentType("application/octet-stream");
@@ -40,11 +41,11 @@ public class FileController {
         InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
         FileCopyUtils.copy(inputStream, response.getOutputStream());
 
-        return "redirect:/";
+
     }
 
     @GetMapping("/commentfile/{id}")
-    public String downloadCommentFile(@PathVariable("id")CommentFile commentFile, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void downloadCommentFile(@PathVariable("id")CommentFile commentFile, HttpServletRequest request, HttpServletResponse response) throws IOException {
         File file = new File(uploadPath+"/"+commentFile.getFilename());
 
         response.setContentType("application/octet-stream");
@@ -53,19 +54,21 @@ public class FileController {
         InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
         FileCopyUtils.copy(inputStream, response.getOutputStream());
 
-        return "redirect:/";
+
     }
     @GetMapping("/material/{id}")
-    public String downloadMaterial(@PathVariable("id") Material material, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void downloadMaterial(@PathVariable("id") Material material, HttpServletRequest request, HttpServletResponse response) throws IOException {
         File file = new File(uploadPath+"/"+material.getFilename());
 
         response.setContentType("application/octet-stream");
         response.setHeader("Content-Disposition", String.format("inline; filename=\"" + file.getName() + "\""));
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        System.out.println(file.getName());
         response.setContentLength((int) file.length());
         InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
         FileCopyUtils.copy(inputStream, response.getOutputStream());
 
-        return "redirect:/";
+
     }
 
 //   @PostMapping("/group/{id}/material")
