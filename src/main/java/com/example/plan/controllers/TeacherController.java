@@ -119,6 +119,7 @@ public class TeacherController {
         task.setTitle(title);
         task.setDeadline(task1.getDeadline());
         task.setDescription(description);
+        task.setCommon("not");
         if(subtaskNames!=null) {
             for (String subtaskName : subtaskNames) {
                 Subtask subtask = new Subtask();
@@ -191,7 +192,7 @@ public class TeacherController {
 
                 }
             }
-            String message = String.format("Здравствуйте, вам было дано новое задание - %s",task1.getTitle());
+            String message = String.format("Здравствуйте, вам было дано новое задание - %s \n Ссылка - %s",task1.getTitle(),"http://localhost:8080/group/"+task.getGroup().getId()+"/student/tasks/" + task.getId());
             mailSender.send(students.get(i).getEmail(),"Новое задание!",message);
 
 
